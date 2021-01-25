@@ -2,7 +2,7 @@ const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
 
-var background_img;
+var background_img,scene,scene_img;
 
 var rocket,rocket_img;
 
@@ -13,7 +13,7 @@ var petrol,petrol_img;
 var petrolLevel = 1000;
 
 function preload(){
-    background_img = loadImage("images/SpaceImage.png");
+    scene_img = loadImage("images/SpaceImage.png");
     rocket_img = loadImage("images/RocketImage.png");
     obstacles_img = loadImage("images/ObstaclesImage.png");
     petrol_img = loadImage("images/PetrolCanImage.png")
@@ -22,21 +22,31 @@ function preload(){
 function setup(){
     createCanvas(1365,655);
 
+    scene = createSprite(0,400,1368,655);
+    scene.addImage('scene',scene_img);
+    scene.scale = 0.75;
+    scene.x = scene.width/2;
+
     rocket = createSprite(40,327.5,20,20);
     rocket.addImage('rocket',rocket_img);
     rocket.scale = 0.0475;
-    
 }
 
 function draw(){
     
 
-    background(background_img);
+    background("black");
 
     drawSprites();
 
     /*background = createSprite(0,0,1368,655);
     background.addImage('background',background_img);*/
+    
+    scene.velocityX = -2;
+
+    if(scene.x < 0){
+        scene.x = scene.width/2;
+    }
 
 
     if(keyDown(UP_ARROW)){
@@ -46,18 +56,13 @@ function draw(){
        rocket.y = rocket.y + 10;
     }
     if(keyDown(RIGHT_ARROW)){
-        rocket.x = rocket.x + 2;
+        rocket.x = rocket.x + 0.1;
      }
     fill(0)
     textSize(24)
-    text(250,600,"Petrol Level :",petrolLevel);
+    text("Petrol Level :"+petrolLevel,250,600);
    
-    background_img.velocityX = -1;
-
-    if(background_img.x < 0){
-        background_img.x = background_img.width/2;
-    }
-
+    
  if(frameCount % 100 === 0){
     var rand = random(0,655);
 
@@ -66,6 +71,8 @@ function draw(){
     obstacles.velocityX = -5;
     obstacles.scale = 0.1;
  }
+
+
  if(frameCount % 275 === 0){
     var rand = random(0,655);
 
@@ -74,16 +81,22 @@ function draw(){
     petrol.velocityX = -5;
     petrol.scale = 0.05;
  }
- if(rocket.isTouching(obstacles)) {
-    petrolLevel = petrolLevel - 250;
- }
+ if(isTouching(rocket,obstacles)){
+      petrolLevel = petrolLevel - 350; 
+   }
+   else{
+      petrolLevel = petrolLevel;
+   }
 
-/*function isTouching(rocket,obstacles){
-    if(rocket >= obstacles) {
-        return true
-        }
-        else {
-          return false;
-        }
-    }*/
 }
+    function isTouching(object1,object2){ 
+       if(object1.x - object2.x < object2.width/2 + object1.width/2 &&
+         object2.x - object1.x < object2.width/2 + object1.width/2 &&
+         object1.y - object2.y < object2.height/2 + object1.height/2 && 
+         object2.y - object2.y < object2.height/2 + object1.height/2){
+            return true;
+            } 
+            else { 
+               return false; 
+         } 
+      }
