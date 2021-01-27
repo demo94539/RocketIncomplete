@@ -24,7 +24,7 @@ function setup(){
 
     scene = createSprite(0,400,1368,655);
     scene.addImage('scene',scene_img);
-    scene.scale = 0.75;
+    scene.scale = 1.00;
     scene.x = scene.width/2;
 
     rocket = createSprite(40,327.5,20,20);
@@ -56,7 +56,11 @@ function draw(){
        rocket.y = rocket.y + 10;
     }
     if(keyDown(RIGHT_ARROW)){
-        rocket.x = rocket.x + 0.1;
+        rocket.x = rocket.x + 10;
+     }
+    
+    if(keyDown(Left_ARROW)){
+        rocket.x = rocket.x -10;
      }
     fill(0)
     textSize(24)
